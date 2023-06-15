@@ -134,6 +134,49 @@ l = @layout [a{0.3h}; b{0.7h}]
 plot(p1, p2, layout=l)
 ```
 
+Example of morse wavelet transform
+
+```math
+The Generalized Morse Wavelets (GMWs) is a superfamily of analytic wavelets.
+
+The GMWs in the frequency domain can be defined by
+
+$$\Psi_{\beta, \gamma}(\omega) := \int \psi_{\beta, \gamma}(t) e^{-i \omega t} d{t} = H(\omega) \alpha_{\beta, \gamma} \omega^\beta e^{-\omega^\gamma} $$
+
+where $\beta>0, \gamma \geq 1$ are two main parameters controlling the form of wavelet, $$\alpha_{\beta, \gamma} = 2 \bigg( \dfrac{e \gamma}{\beta} \bigg)^{\beta / \gamma}$$
+is a normalization constant, and $H(\omega)$ is the Heaviside step function.
+Besides showing an additional degree of freedom in the GMWs, the two parameters $\beta$ and $\gamma$ control the time-domain and frequency-domain decay respectively.
+```
+
+Example of Morse wavelet transform on the doppler test function.
+```julia
+n=2047;
+t = range(0,n/1000,length=n); # 1kHz sampling rate
+f = testfunction(n, "Doppler");
+p1=plot(t, f,legend=false,title="Doppler",xticks=false)
+plot_append = []
+
+beta_max = 4
+gamma_max = 3
+for i in 1:beta_max
+    for j = 1:gamma_max
+        c = wavelet(Morse(i+1, j, 1));
+        res = ContinuousWavelets.cwt(f, c)
+        # plotting
+        freqs = getMeanFreq(ContinuousWavelets.computeWavelets(n, c)[1])
+        freqs[1] = 0
+        p2=heatmap(t,freqs, abs.(res)',title = "(ß, γ) = (" * string(i+1) *", "* string(j) * ")", colorbar=false)
+        if (j == floor((1 + gamma_max) / 2)) & (i == beta_max)
+            p2=heatmap(t,freqs, abs.(res)',title = "(ß, γ) = (" * string(i+1) *", "* string(j) * ")", colorbar=false, xlabel= "time (s)")
+        end
+        push!(plot_append, p2)
+    end
+end
+p = plot((plot_append[i] for i in 1:beta_max * gamma_max)..., layout = (beta_max, gamma_max), size = (900, 500))
+```
+
+![Bumps](/docs/morse_pic/Doppler_morse.svg)
+
 ![parallel transforms](/docs/multiEx.svg)
 
 There are also several boundary conditions, depending on the kind of data given; the default `SymBoundary()` symmetrizes the data, while `PerBoundary()` assumes it is periodic, and `ZPBoundary` pads with zeros.
