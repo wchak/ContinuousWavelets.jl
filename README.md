@@ -134,6 +134,8 @@ l = @layout [a{0.3h}; b{0.7h}]
 plot(p1, p2, layout=l)
 ```
 
+![parallel transforms](/docs/multiEx.svg)
+
 Example of morse wavelet transform
 
 ```math
@@ -143,7 +145,7 @@ The GMWs in the frequency domain can be defined by
 
 $$\Psi_{\beta, \gamma}(\omega) := \int \psi_{\beta, \gamma}(t) e^{-i \omega t} d{t} = H(\omega) \alpha_{\beta, \gamma} \omega^\beta e^{-\omega^\gamma} $$
 
-where $\beta>0, \gamma \geq 1$ are two main parameters controlling the form of wavelet, $$\alpha_{\beta, \gamma} = 2 \bigg( \dfrac{e \gamma}{\beta} \bigg)^{\beta / \gamma}$$
+where $\beta>0, \gamma \geq 1$ are two main parameters controlling the form of wavelet, $$\alpha_{\beta, \gamma} = 2 \bigg( \dfrac{e \gamma}{\beta} \bigg)^{\beta / \gamma}$
 is a normalization constant, and $H(\omega)$ is the Heaviside step function.
 Besides showing an additional degree of freedom in the GMWs, the two parameters $\beta$ and $\gamma$ control the time-domain and frequency-domain decay respectively.
 ```
@@ -175,9 +177,21 @@ end
 p = plot((plot_append[i] for i in 1:beta_max * gamma_max)..., layout = (beta_max, gamma_max), size = (900, 500))
 ```
 
-![Bumps](/docs/morse_pic/Doppler_morse.svg)
+![Dop_morse](/docs/morse_pic/Doppler_morse.svg)
 
-![parallel transforms](/docs/multiEx.svg)
+Example of Morlet wavelet transform on the HeaviSine test function.
+![HeaviSine_morlet](/docs/morse_pic/HeaviSine_morlet.svg")
+
+Example of Morse wavelet transform on the HeaviSine test function.
+![HeaviSine_morlet](/docs/morse_pic/HeaviSine_morse.svg")
+
+Example of Morlet wavelet transform on the Blocks test function.
+![HeaviSine_morlet](/docs/morse_pic/Blocks_morlet.svg")
+
+Example of Morse wavelet transform on the Blocks test function.
+![HeaviSine_morlet](/docs/morse_pic/Blocks_morse.svg")
+
+
 
 There are also several boundary conditions, depending on the kind of data given; the default `SymBoundary()` symmetrizes the data, while `PerBoundary()` assumes it is periodic, and `ZPBoundary` pads with zeros.
 All wavelets are stored in the Fourier domain, and all transforms consist of performing an fft (possibly an rfft if the data is real) of the input, pointwise multiplication (equivalent to convolution in the time domain), and then returning to the time domain.
